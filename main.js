@@ -1,5 +1,5 @@
 const {app, BrowserWindow} = require('electron')
-
+//var screenshot = require('electron-screenshot')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
@@ -13,7 +13,7 @@ function createWindow () {
 
   // Open the DevTools.
   // win.webContents.openDevTools()
-
+  //screenshot("screebshots/shot.png")
   // Emitted when the window is closed.
   win.on('closed', () => {
     // Dereference the window object, usually you would store windows
