@@ -96,19 +96,74 @@
 		var onPointCloudLoaded = function(event){
 			// do stuff here that should be executed whenever a point cloud has been loaded.
 			// event.pointcloud returns the point cloud object
+			const util = require('util');
 			console.log("a point cloud has been loaded");
+			viewer.camera.up = new THREE.Vector3(0,0,1);
+			//set starting position
+
+			viewer.camera.position.set(11, -10.107168,1);
+			viewer.camera.lookAt(new THREE.Vector3(0,1,0));
+			console.log(viewer.camera.rotation);
+
+			//setup tween object 
+			var target = new THREE.Vector3(-10, 211, 2.3);
+			var easing = TWEEN.Easing.Linear.None;
+			var tween = new TWEEN.Tween(viewer.camera.position)
+									    .to(target, 240000);
+			tween.easing(easing);
+			
+
+			tween.onUpdate(function(){
+				viewer.camera.lookAt(target);
+
+				var save_screenshot  = function(counter){
+					viewer.renderer.domElement.toBlob( function(blob){
+					const fs = require('fs');
+					var arrayBuffer;
+					var fileReader = new FileReader();
+					fileReader.onload = function() {
+					    arrayBuffer = new Buffer(this.result, 'binary');
+					    //var uint8ArrayNew  = new Uint8Array(arrayBuffer);
+					    function pad (str, max) {
+  							return str.length < max ? pad("0" + str, max) : str;
+						}
+					    fs.writeFileSync("screenshots/" + pad(counter.toString(),6) + ".png", arrayBuffer,'binary');
+					};
+					fileReader.readAsArrayBuffer(blob);
+				});
+
+
+				}
+
+
+				if(counter % 20 == 0){
+						save_screenshot(counter);
+			 	}
+				counter ++ ;
+
+
+			});
+
+			tween.onComplete(function(){
+				viewer.camera.lookAt(target);
+				console.log(viewer.camera.rotation);
+			});
+			tween.delay(15000)
+			tween.start();
 		};
 
+
+		var counter = 0
 		viewer = new Potree.Viewer(document.getElementById("potree_render_area"), {
 			"onPointCloudLoaded": onPointCloudLoaded
 		});
 
 		viewer.setEDLEnabled(false);
-		viewer.setPointSize(3);
+		viewer.setPointSize(4.0);
 		viewer.setMaterial("RGB");
 		viewer.setFOV(60);
 		viewer.setPointSizing("Fixed");
-		viewer.setQuality("Squares");
+		viewer.setQuality("Circles");
 		viewer.setPointBudget(1*1000*1000);
 		//viewer.setOpacity(0.03);
 		viewer.setDescription("");
@@ -116,7 +171,11 @@
 
 		viewer.addPointCloud("seq_19/cloud.js");
 
+		//viewer.camera.lookAt(new THREE.Vector3(0,1,0));
+		//camera.rotation.set(-Math.PI / 2, 0, 0);
 		viewer.loadGUI();
+
+
 
 	</script>
   </body>

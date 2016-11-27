@@ -1,0 +1,15 @@
+viewer.renderer.domElement.toBlob( function(blob){
+			const fs = require('fs');
+			var arrayBuffer;
+			var fileReader = new FileReader();
+			fileReader.onload = function() {
+			    arrayBuffer = new Buffer(this.result, 'binary');
+			    //var uint8ArrayNew  = new Uint8Array(arrayBuffer);
+			    fs.writeFileSync("screenshot.png", arrayBuffer,'binary');
+			};
+			fileReader.readAsArrayBuffer(blob);
+			
+		});
+		x: 8.570226734110047, y: 2.872816825733672, z: -2.5888754082392396}
+		viewer.camera.position.set(-6.1163, -0.107168,-0.582225);
+		viewer.camera.rotation.set(0, 0, 0);

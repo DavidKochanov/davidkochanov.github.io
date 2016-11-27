@@ -12185,7 +12185,7 @@ Potree.Viewer = function(domElement, args){
 		scope.referenceFrame = new THREE.Object3D();
 		scope.scenePointCloud.add(scope.referenceFrame);
 
-		scope.renderer = new THREE.WebGLRenderer();
+		scope.renderer = new THREE.WebGLRenderer({preserveDrawingBuffer: true});
 		scope.renderer.setSize(width, height);
 		scope.renderer.autoClear = false;
 		scope.renderArea.appendChild(scope.renderer.domElement);
@@ -12209,7 +12209,7 @@ Potree.Viewer = function(domElement, args){
 		//this.addPointCloud(pointcloudPath);
 		
 		var grid = Potree.utils.createGrid(5, 5, 2);
-		scope.scene.add(grid);
+		//scope.scene.add(grid);
 		
 		scope.measuringTool = new Potree.MeasuringTool(scope.scenePointCloud, scope.camera, scope.renderer, scope.toGeo);
 		scope.profileTool = new Potree.ProfileTool(scope.scenePointCloud, scope.camera, scope.renderer);
